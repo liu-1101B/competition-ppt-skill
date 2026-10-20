@@ -1,0 +1,4 @@
+# 让 GitHub 的语言统计正确识别这个仓库
+# 复制到 competition-ppt-skill 仓库根目录即可
+*.md linguist-documentation
+*.py linguist-language=Python
