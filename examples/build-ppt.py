@@ -9,14 +9,47 @@ from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
-import os, copy
+import argparse
+import os
+import copy
+from pathlib import Path
+
+
+def parse_args():
+    """Parse portable paths for project images, generated backgrounds, and output."""
+    example_dir = Path(__file__).resolve().parent
+    parser = argparse.ArgumentParser(
+        description="Build the bundled 助你好梦 20-slide PPT example."
+    )
+    parser.add_argument(
+        "--image-dir",
+        type=Path,
+        default=example_dir / "project-images",
+        help="directory containing project-specific images",
+    )
+    parser.add_argument(
+        "--background-dir",
+        type=Path,
+        default=example_dir / "ppt-assets",
+        help="directory containing backgrounds from generate-assets.py",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=example_dir / "output" / "助你好梦_国赛路演.pptx",
+        help="output PPTX file path",
+    )
+    return parser.parse_args()
+
+
+ARGS = parse_args()
 
 # === CONFIG ===
 W = Inches(13.33)
 H = Inches(7.5)
-IMG = "/sessions/zealous-eager-fermat/mnt/outputs/ppt-images"
-BG = "/sessions/zealous-eager-fermat/mnt/被子/ppt-assets"
-OUT = "/sessions/zealous-eager-fermat/mnt/被子/助你好梦_国赛路演.pptx"
+IMG = str(ARGS.image_dir.expanduser())
+BG = str(ARGS.background_dir.expanduser())
+OUT = ARGS.output.expanduser()
 
 prs = Presentation()
 prs.slide_width = W
@@ -925,3 +958,8 @@ gold_line(s, 4.5, 4.0, 4.3)
 # Contact info
 text_box(s, 0, 4.5, 13.33, 0.5, "助你好梦创业团队", font_size=18, color=WHITE, align=PP_ALIGN.CENTER)
 text_box(s, 0, 5.2, 13.33, 0.5, "中国国际大学生创新大赛（2025）", font_size=16, color=LIGHT_GOLD, align=PP_ALIGN.CENTER)
+
+# Save the generated deck; create the destination directory when necessary.
+OUT.parent.mkdir(parents=True, exist_ok=True)
+prs.save(str(OUT))
+print("PPTX saved: %s (%d slides)" % (OUT, len(prs.slides)))
