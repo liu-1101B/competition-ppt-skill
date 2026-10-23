@@ -4,7 +4,7 @@
 
 **中国国际大学生创新大赛 · 路演 PPT 生成方法论**
 
-[![Stars](https://img.shields.io/github/stars/2750527986liu-maker/competition-ppt-skill?style=flat-square)](https://github.com/2750527986liu-maker/competition-ppt-skill/stargazers)
+[![Stars](https://img.shields.io/github/stars/liu-1101B/competition-ppt-skill?style=flat-square)](https://github.com/liu-1101B/competition-ppt-skill/stargazers)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 
@@ -20,7 +20,7 @@
 
 不是模板库，是一套**方法论 + 生成脚本**。
 
-网上大多数"竞赛 PPT 模板"是把同一批素材换来换去，撞车比做砸更致命。这套东西反着来：不复制素材，只拆解结构——从两份国赛级路演模板（41 页冰雪经济 / 43 页低空经济）里提取页序、Section 标签体系、副标题句式、配色与排版节奏，再用 `python-pptx` + `PIL` 现场生成原创背景和版式，输出 30–45 页可编辑的 PPTX。
+网上大多数"竞赛 PPT 模板"是把同一批素材换来换去，撞车比做砸更致命。这套东西反着来：不复制素材，只拆解结构——方法论文档介绍了如何参考路演模板分析页序、Section 标签体系、副标题句式、配色与排版节奏，再用 `python-pptx` + `PIL` 生成原创背景和版式。**当前仓库随附的 `examples/build-ppt.py` 仍是“助你好梦”项目的 20 页示例脚本，不是能够自动生成任意项目 30–45 页幻灯片的通用引擎。**
 
 一份 `SKILL.md`（方法论）+ 两个脚本（生图 / 出稿），交给具备文件读写能力的 Agent 执行。
 
@@ -46,9 +46,32 @@
 
 ## 快速开始
 
+需要 Python 3.9+。安装脚本依赖：
+
 ```bash
-pip install python-pptx pillow
+python -m pip install python-pptx pillow
 ```
+
+生成配套背景（默认输出到 `examples/ppt-assets/`）：
+
+```bash
+python examples/generate-assets.py
+```
+
+生成随仓库提供的“助你好梦”20 页示例稿（默认输出到 `examples/output/助你好梦_国赛路演.pptx`）：
+
+```bash
+python examples/build-ppt.py
+```
+
+路径可通过参数显式指定，且不依赖作者的沙箱目录：
+
+```bash
+python examples/generate-assets.py --output-dir ./work/backgrounds
+python examples/build-ppt.py --image-dir ./work/project-images --background-dir ./work/backgrounds --output ./work/demo.pptx
+```
+
+若没有提供项目图片或背景，脚本会跳过对应图片，仍可生成布局示例；因此最终观感取决于资产是否齐全。
 
 1. 把 `SKILL.md` 放进 Agent 的 skills 目录（Claude Cowork / 其他兼容 skills 规范的环境）。
 2. 准备好项目材料：策划书、路演稿、产品图、数据表。有参考模板就一起给。
