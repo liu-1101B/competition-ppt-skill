@@ -4,9 +4,18 @@ Generate original design assets for 助你好梦 PPT
 Using PIL to create gradient backgrounds, patterns, and design elements
 """
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import argparse
 import math, random, os
+from pathlib import Path
 
-OUT = "/sessions/zealous-eager-fermat/mnt/被子/ppt-assets"
+parser = argparse.ArgumentParser(description="Generate original backgrounds for the bundled PPT example.")
+parser.add_argument(
+    "--output-dir",
+    type=Path,
+    default=Path(__file__).resolve().parent / "ppt-assets",
+    help="directory where generated PNG assets will be written",
+)
+OUT = str(parser.parse_args().output_dir.expanduser())
 os.makedirs(OUT, exist_ok=True)
 
 # PPT dimensions: 13.33 x 7.5 inches at 150 DPI = 2000x1125 px
